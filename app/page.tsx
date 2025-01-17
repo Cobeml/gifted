@@ -1,101 +1,316 @@
+"use client";
+
+export const dynamic = 'force-dynamic';
+
+import { AuroraBackground } from "@/app/components/ui/aurora-background";
+import { HowItWorks } from "@/app/components/ui/how-it-works";
+import { NavBar } from "@/app/components/ui/tubelight-navbar";
+import { PricingSection } from "@/app/components/ui/pricing-section";
+import { RainbowButton } from "@/app/components/ui/rainbow-button";
+import { SparklesText } from "@/app/components/ui/sparkles-text";
+import { Gift, HomeIcon, CreditCard, Send } from "lucide-react";
+import { useTheme } from "next-themes";
+import { motion } from "framer-motion";
 import Image from "next/image";
+import { InfiniteSlider } from "@/app/components/ui/infinite-slider";
+import { Footerdemo } from "@/app/components/ui/footer-section";
+
+const navItems = [
+  { name: "Home", url: "#home", icon: HomeIcon },
+  { name: "How It Works", url: "#how-it-works", icon: Gift },
+  { name: "Pricing", url: "#pricing", icon: CreditCard },
+  { name: "Contact", url: "#contact", icon: Send },
+];
+
+const pricingTiers = [
+  {
+    name: "Single Gift",
+    price: { 
+      monthly: 129,
+      yearly: 129
+    },
+    description: "Perfect for one-time gifting",
+    features: [
+      "One premium gift",
+      "AI-powered suggestions",
+      "Expert curation",
+      "Premium gift wrapping",
+      "Delivery included"
+    ],
+    cta: "Purchase"
+  },
+  {
+    name: "Quarterly",
+    price: { 
+      monthly: 99,
+      yearly: 79
+    },
+    description: "Best for regular gift-givers",
+    features: [
+      "Three premium gifts per quarter",
+      "Priority AI suggestions",
+      "Expert curation",
+      "Premium gift wrapping",
+      "Free priority shipping",
+      "Gift scheduling"
+    ],
+    popular: true,
+    cta: "Choose Quarterly"
+  },
+  {
+    name: "Quarterly Luxury",
+    price: { 
+      monthly: 299,
+      yearly: 239
+    },
+    description: "For luxury gifting experience",
+    features: [
+      "2 premium & 2 luxury gifts per quarter",
+      "Advanced AI suggestions",
+      "Dedicated gift curator",
+      "Premium gift wrapping",
+      "Free priority shipping",
+      "Gift scheduling",
+      "VIP concierge service"
+    ],
+    cta: "Choose Luxury"
+  }
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { theme } = useTheme();
+  const sparkleColors = theme === 'dark' 
+    ? { first: "#9E7AFF", second: "#FE8BBB" }
+    : { first: "#7C3AED", second: "#EC4899" };
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="relative">
+      <div className="fixed top-0 left-0 right-0 flex items-center justify-between px-4 z-50">
+        <div 
+          className="py-4 cursor-pointer" 
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        >
+          <Image
+            src="/logo.svg"
+            alt="Gifted Logo"
+            width={100}
+            height={50}
+            priority
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <NavBar items={navItems} />
+      </div>
+      <div className="min-h-screen overflow-auto">
+        <section id="home" className="relative min-h-screen">
+          <AuroraBackground>
+            <div
+              className="relative flex flex-col gap-8 items-center justify-center px-4 h-screen"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.8,
+                  ease: "easeOut",
+                }}
+                className="flex flex-col gap-12 items-center"
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.8,
+                    ease: "easeOut",
+                  }}
+                >
+                  <SparklesText 
+                    text="Gifted" 
+                    className="text-[12rem] md:text-[18rem] font-bold text-[hsl(0,59%,30%)] dark:text-[hsl(0,59%,40%)]"
+                    colors={sparkleColors}
+                    sparklesCount={20}
+                    style={{ fontFamily: "Georgia, serif", fontStyle: "italic" }}
+                  />
+                </motion.div>
+              </motion.div>
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.2,
+                  duration: 0.8,
+                  ease: "easeOut",
+                }}
+                className="text-xl md:text-2xl text-[hsl(0,59%,30%)] dark:text-[hsl(0,59%,40%)]"
+              >
+                AI-Powered Personal Gifting, Curated with Human Touch
+              </motion.h2>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.4,
+                  duration: 0.8,
+                  ease: "easeOut",
+                }}
+              >
+                <div 
+                  onClick={() => {
+                    const element = document.querySelector('#pricing');
+                    if (element && element instanceof HTMLElement) {
+                      const offset = 80;
+                      const top = element.offsetTop - offset;
+                      window.scrollTo({
+                        top,
+                        behavior: "smooth"
+                      });
+                    }
+                  }}
+                  className="relative z-30"
+                >
+                  <RainbowButton 
+                    className="mt-8 text-lg py-6 px-12"
+                  >
+                    Start Gifting Today
+                  </RainbowButton>
+                </div>
+              </motion.div>
+            </div>
+          </AuroraBackground>
+        </section>
+
+        <motion.section
+          initial={{ opacity: 0.0, y: 100, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{
+            delay: 0.3,
+            duration: 1,
+            ease: "easeOut",
+          }}
+          className="bg-background min-h-screen flex flex-col items-center justify-center gap-16 py-20"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <motion.h2 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.2,
+              duration: 0.8,
+              ease: "easeOut",
+            }}
+            className="text-4xl font-bold text-center"
+          >
+            Curated with Care
+          </motion.h2>
+          <motion.div 
+            initial={{ opacity: 0, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.5,
+              duration: 1.2,
+              ease: "easeOut",
+            }}
+            className="w-full"
+          >
+            <InfiniteSlider duration={20} direction="horizontal" gap={32}>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: 0.1 * i,
+                    duration: 0.8,
+                    ease: "easeOut",
+                  }}
+                  className="relative w-[300px] h-[400px] rounded-xl overflow-hidden flex-shrink-0"
+                >
+                  <Image
+                    src={`/gifts/gift-${i}.jpg`}
+                    alt={`Gift example ${i}`}
+                    fill
+                    className="object-cover"
+                  />
+                </motion.div>
+              ))}
+            </InfiniteSlider>
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.7,
+              duration: 1.2,
+              ease: "easeOut",
+            }}
+            className="w-full"
+          >
+            <InfiniteSlider duration={15} direction="horizontal" gap={32} reverse>
+              {[6, 7, 8, 9, 10].map((i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: 0.1 * (i - 5),
+                    duration: 0.8,
+                    ease: "easeOut",
+                  }}
+                  className="relative w-[300px] h-[400px] rounded-xl overflow-hidden flex-shrink-0"
+                >
+                  <Image
+                    src={`/gifts/gift-${i}.jpg`}
+                    alt={`Gift example ${i}`}
+                    fill
+                    className="object-cover"
+                  />
+                </motion.div>
+              ))}
+            </InfiniteSlider>
+          </motion.div>
+        </motion.section>
+
+        <motion.section
+          id="how-it-works"
+          initial={{ opacity: 0.0, y: 100, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{
+            delay: 0.3,
+            duration: 1,
+            ease: "easeOut",
+          }}
+          className="bg-background min-h-screen"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <div>
+            <HowItWorks />
+          </div>
+        </motion.section>
+
+        <motion.section
+          id="pricing"
+          initial={{ opacity: 0.0, y: 100, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{
+            delay: 0.3,
+            duration: 1,
+            ease: "easeOut",
+          }}
+          className="bg-background h-screen"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <div>
+            <PricingSection
+              title="Choose Your Plan"
+              subtitle="Find the perfect gifting plan for your needs"
+              tiers={pricingTiers}
+              frequencies={["monthly", "yearly"]}
+            />
+          </div>
+        </motion.section>
+
+        <section id="contact">
+          <Footerdemo />
+        </section>
+      </div>
     </div>
   );
 }
