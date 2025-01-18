@@ -1,60 +1,58 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocument, PutCommand } from "@aws-sdk/lib-dynamodb";
-
-const client = new DynamoDBClient({
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
-  region: process.env.AWS_REGION,
-});
-
-const ddbDocClient = DynamoDBDocument.from(client);
+import { dynamoDb } from "@/utils/aws-config";
+import { NewsletterSubscriber, TableNames, validateNewsletterSubscriber } from "@/utils/dynamodb-schema";
 
 export async function POST(req: Request) {
   try {
     const { email } = await req.json();
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!email) {
       return new Response(
-        JSON.stringify({ error: "Invalid email address" }),
+        JSON.stringify({ error: "Email is required" }),
         { status: 400 }
       );
     }
 
-    const timestamp = new Date().toISOString();
+    // Check if subscriber already exists
+    const existingSubscriber = await dynamoDb.get({
+      TableName: TableNames.NEWSLETTER!,
+      Key: { email },
+    }).promise();
 
-    await ddbDocClient.send(
-      new PutCommand({
-        TableName: process.env.AWS_DYNAMODB_NEWSLETTER_TABLE,
-        Item: {
-          email,
-          subscribed_at: timestamp,
-          status: "active",
-        },
-        ConditionExpression: "attribute_not_exists(email)",
-      })
-    );
-
-    // Send welcome email using the existing email infrastructure
-    // This is optional and can be implemented later
-    // await sendWelcomeEmail(email);
-
-    return new Response(
-      JSON.stringify({ message: "Successfully subscribed to newsletter" }),
-      { status: 200 }
-    );
-  } catch (error: any) {
-    if (error.name === "ConditionalCheckFailedException") {
+    if (existingSubscriber.Item) {
       return new Response(
-        JSON.stringify({ error: "Email already subscribed" }),
-        { status: 409 }
+        JSON.stringify({ message: "Already subscribed" }),
+        { status: 200 }
       );
     }
 
+    // Create new subscriber item
+    const newSubscriber: NewsletterSubscriber = {
+      email,
+      subscribed_at: new Date().toISOString(),
+      status: "active",
+    };
+
+    // Validate the item
+    if (!validateNewsletterSubscriber(newSubscriber)) {
+      throw new Error("Invalid subscriber data");
+    }
+
+    // Add new subscriber
+    await dynamoDb.put({
+      TableName: TableNames.NEWSLETTER!,
+      Item: newSubscriber,
+    }).promise();
+
+    // TODO: Send welcome email using email service
+
+    return new Response(
+      JSON.stringify({ message: "Successfully subscribed" }),
+      { status: 200 }
+    );
+  } catch (error) {
     console.error("Newsletter subscription error:", error);
     return new Response(
-      JSON.stringify({ error: "Failed to subscribe to newsletter" }),
+      JSON.stringify({ error: "Failed to subscribe" }),
       { status: 500 }
     );
   }

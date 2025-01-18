@@ -70,10 +70,10 @@ export function HowItWorks() {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold dark:text-white text-black mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold dark:text-white text-black mb-4 font-heading">
             How It Works
           </h2>
-          <p className="text-lg dark:text-neutral-200 text-neutral-800 mb-12">
+          <p className="text-lg dark:text-neutral-200 text-neutral-800 mb-12 font-body">
             AI-Powered Gifting with a Human Touch
           </p>
         </div>
@@ -96,11 +96,11 @@ export function HowItWorks() {
               </div>
               <div className="text-lg font-bold mb-2 relative z-10 px-10">
                 <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover/feature:bg-blue-500 transition-all duration-200 origin-center" />
-                <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-neutral-800 dark:text-neutral-100">
+                <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-neutral-800 dark:text-neutral-100 font-heading">
                   {feature.title}
                 </span>
               </div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-300 max-w-xs relative z-10 px-10">
+              <p className="text-sm text-neutral-600 dark:text-neutral-300 max-w-xs relative z-10 px-10 font-body">
                 {feature.description}
               </p>
             </div>

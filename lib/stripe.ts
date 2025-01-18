@@ -56,7 +56,16 @@ export async function listSubscriptions(customerId: string) {
 
 // Price IDs for our subscription tiers
 export const SUBSCRIPTION_PRICES = {
-  SINGLE_GIFT: process.env.STRIPE_PRICE_SINGLE_GIFT,
-  QUARTERLY: process.env.STRIPE_PRICE_QUARTERLY,
-  MONTHLY: process.env.STRIPE_PRICE_MONTHLY,
+  SINGLE_GIFT: {
+    monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_SINGLE_GIFT,
+    yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_SINGLE_GIFT,
+  },
+  QUARTERLY: {
+    monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_QUARTERLY,
+    yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_QUARTERLY_ANNUAL,
+  },
+  LUXURY: {
+    monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_LUXURY,
+    yearly: process.env.NEXT_PUBLIC_STRIPE_PRICE_LUXURY_ANNUAL,
+  },
 } as const; 

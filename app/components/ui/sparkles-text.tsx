@@ -33,13 +33,6 @@ interface SparklesTextProps {
   className?: string;
 
   /**
-   * @type CSSProperties
-   * @description
-   * Additional styles to apply to the text container
-   */
-  style?: CSSProperties;
-
-  /**
    * @required
    * @type string
    * @description
@@ -72,7 +65,6 @@ const SparklesText: React.FC<SparklesTextProps> = ({
   colors = { first: "#9E7AFF", second: "#FE8BBB" },
   className,
   sparklesCount = 10,
-  style,
   ...props
 }) => {
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);
@@ -114,13 +106,17 @@ const SparklesText: React.FC<SparklesTextProps> = ({
 
   return (
     <div
-      className={cn("text-6xl font-bold", className)}
+      className={cn("text-40xl", className)}
       {...props}
-      style={{
-        "--sparkles-first-color": `${colors.first}`,
-        "--sparkles-second-color": `${colors.second}`,
-        ...style,
-      } as CSSProperties}
+      style={
+        {
+          "--sparkles-first-color": `${colors.first}`,
+          "--sparkles-second-color": `${colors.second}`,
+          fontFamily: "Georgia",
+          fontWeight: "bold",
+          fontStyle: "italic"
+        } as CSSProperties
+      }
     >
       <span className="relative inline-block">
         {sparkles.map((sparkle) => (

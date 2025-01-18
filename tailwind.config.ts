@@ -22,6 +22,11 @@ export default {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ['var(--font-sans)'],
+  			heading: ['var(--font-heading)'],
+  			body: ['var(--font-body)'],
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -79,7 +84,9 @@ export default {
   		},
   		animation: {
   			aurora: 'aurora 60s linear infinite',
-  			rainbow: 'rainbow var(--speed, 2s) infinite linear'
+  			rainbow: 'rainbow var(--speed, 2s) infinite linear',
+  			"meteor-effect": "meteor 5s linear infinite",
+  			shimmer: "shimmer 3s linear infinite",
   		},
   		keyframes: {
   			aurora: {
@@ -97,7 +104,19 @@ export default {
   				'100%': {
   					'background-position': '200%'
   				}
-  			}
+  			},
+  			meteor: {
+  				"0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
+  				"70%": { opacity: "1" },
+  				"100%": {
+  					transform: "rotate(215deg) translateX(-500px)",
+  					opacity: "0",
+  				},
+  			},
+  			shimmer: {
+  				"0%": { backgroundPosition: "0 0" },
+  				"100%": { backgroundPosition: "250% 0" },
+  			},
   		}
   	}
   },
