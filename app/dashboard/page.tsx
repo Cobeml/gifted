@@ -120,8 +120,8 @@ export default function DashboardPage() {
           <Image
             src="/logo.svg"
             alt="Gifted Logo"
-            width={150}
-            height={75}
+            width={170}
+            height={85}
             priority
           />
         </Link>

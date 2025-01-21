@@ -13,15 +13,14 @@ const dynamoDb = DynamoDBDocument.from(new DynamoDB({
   region: process.env.AWS_REGION,
 }));
 
-type Context = {
-  params: {
-    id: string;
-  };
-};
-
-export async function GET(request: NextRequest, context: Context) {
+export async function GET(
+    request: NextRequest,
+    context: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   try {
     const session = await getServerSession(authOptions);
+    const { id } = await context.params;
+    
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -31,7 +30,7 @@ export async function GET(request: NextRequest, context: Context) {
       KeyConditionExpression: "pk = :pk AND sk = :sk",
       ExpressionAttributeValues: {
         ":pk": `USER#${session.user.email}`,
-        ":sk": `GIFT#${context.params.id}`,
+        ":sk": `GIFT#${id}`,
       },
     });
 
@@ -46,9 +45,14 @@ export async function GET(request: NextRequest, context: Context) {
   }
 }
 
-export async function PUT(request: NextRequest, context: Context) {
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   try {
     const session = await getServerSession(authOptions);
+    const { id } = await context.params;
+    
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -62,7 +66,7 @@ export async function PUT(request: NextRequest, context: Context) {
       KeyConditionExpression: "pk = :pk AND sk = :sk",
       ExpressionAttributeValues: {
         ":pk": `USER#${session.user.email}`,
-        ":sk": `GIFT#${context.params.id}`,
+        ":sk": `GIFT#${id}`,
       },
     });
 
