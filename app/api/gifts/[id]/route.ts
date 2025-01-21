@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
@@ -13,16 +13,17 @@ const dynamoDb = DynamoDBDocument.from(new DynamoDB({
   region: process.env.AWS_REGION,
 }));
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+type Context = {
+  params: {
+    id: string;
+  };
+};
+
+export async function GET(request: NextRequest, context: Context) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-      return new NextResponse(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-      });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const result = await dynamoDb.query({
@@ -30,37 +31,26 @@ export async function GET(
       KeyConditionExpression: "pk = :pk AND sk = :sk",
       ExpressionAttributeValues: {
         ":pk": `USER#${session.user.email}`,
-        ":sk": `GIFT#${params.id}`,
+        ":sk": `GIFT#${context.params.id}`,
       },
     });
 
     if (!result.Items?.length) {
-      return new NextResponse(JSON.stringify({ error: "Gift not found" }), {
-        status: 404,
-      });
+      return NextResponse.json({ error: "Gift not found" }, { status: 404 });
     }
 
-    return new NextResponse(JSON.stringify({ gift: result.Items[0] }), {
-      status: 200,
-    });
+    return NextResponse.json({ gift: result.Items[0] });
   } catch (error) {
     console.error("Error fetching gift:", error);
-    return new NextResponse(JSON.stringify({ error: "Failed to fetch gift" }), {
-      status: 500,
-    });
+    return NextResponse.json({ error: "Failed to fetch gift" }, { status: 500 });
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, context: Context) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-      return new NextResponse(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-      });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const data = await request.json();
@@ -72,14 +62,12 @@ export async function PUT(
       KeyConditionExpression: "pk = :pk AND sk = :sk",
       ExpressionAttributeValues: {
         ":pk": `USER#${session.user.email}`,
-        ":sk": `GIFT#${params.id}`,
+        ":sk": `GIFT#${context.params.id}`,
       },
     });
 
     if (!existingGift.Items?.length) {
-      return new NextResponse(JSON.stringify({ error: "Gift not found" }), {
-        status: 404,
-      });
+      return NextResponse.json({ error: "Gift not found" }, { status: 404 });
     }
 
     const gift: Gift = {
@@ -101,13 +89,9 @@ export async function PUT(
       Item: gift,
     });
 
-    return new NextResponse(JSON.stringify({ gift }), {
-      status: 200,
-    });
+    return NextResponse.json({ gift });
   } catch (error) {
     console.error("Error updating gift:", error);
-    return new NextResponse(JSON.stringify({ error: "Failed to update gift" }), {
-      status: 500,
-    });
+    return NextResponse.json({ error: "Failed to update gift" }, { status: 500 });
   }
 } 
