@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
-import { authOptions } from "@/app/api/auth/auth-options";
+import { authOptions } from "../../auth/auth-options";
 import { Gift } from "@/utils/dynamodb-schema";
 
 const dynamoDb = DynamoDBDocument.from(new DynamoDB({
@@ -15,7 +15,7 @@ const dynamoDb = DynamoDBDocument.from(new DynamoDB({
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -30,7 +30,7 @@ export async function GET(
       KeyConditionExpression: "pk = :pk AND sk = :sk",
       ExpressionAttributeValues: {
         ":pk": `USER#${session.user.email}`,
-        ":sk": `GIFT#${params.id}`,
+        ":sk": `GIFT#${context.params.id}`,
       },
     });
 
