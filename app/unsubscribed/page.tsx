@@ -1,10 +1,12 @@
 import Link from 'next/link';
 
-export default function UnsubscribedPage({
+export default async function UnsubscribedPage({
   searchParams,
 }: {
-  searchParams: { email: string };
+  searchParams: Promise<{ email: string }>;
 }) {
+  const { email } = await searchParams;
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
       <div className="max-w-md w-full px-6 py-8 bg-white rounded-lg shadow-md">
@@ -14,8 +16,8 @@ export default function UnsubscribedPage({
           </h1>
           <div className="mb-6 text-gray-600">
             <p>
-              {searchParams.email
-                ? `${searchParams.email} has been unsubscribed from our newsletter.`
+              {email
+                ? `${email} has been unsubscribed from our newsletter.`
                 : 'You have been unsubscribed from our newsletter.'}
             </p>
             <p className="mt-2">
