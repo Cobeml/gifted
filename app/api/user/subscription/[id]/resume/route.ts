@@ -19,10 +19,12 @@ const docClient = DynamoDBDocument.from(client);
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
+    const { id } = await context.params;
+    
     if (!session?.user) {
       return new NextResponse(
         JSON.stringify({ error: "Not authenticated" }),
@@ -30,7 +32,7 @@ export async function POST(
       );
     }
 
-    const subscriptionId = params.id;
+    const subscriptionId = id;
     
     // Resume the subscription in Stripe
     const subscription = await stripe.subscriptions.update(subscriptionId, {
