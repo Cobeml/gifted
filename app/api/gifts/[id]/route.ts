@@ -15,7 +15,7 @@ const dynamoDb = DynamoDBDocument.from(new DynamoDB({
 
 export async function GET(
   request: Request,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -30,7 +30,7 @@ export async function GET(
       KeyConditionExpression: "pk = :pk AND sk = :sk",
       ExpressionAttributeValues: {
         ":pk": `USER#${session.user.email}`,
-        ":sk": `GIFT#${context.params.id}`,
+        ":sk": `GIFT#${params.id}`,
       },
     });
 
