@@ -114,42 +114,42 @@ export const Dots = ({ variant = "v1", ...props }: DotsProps) => {
   }
 }
 
-export const Dots_v1 = ({ size, color }: SpinnerProps) => (
+export const Dots_v1 = ({ size = "md", color = "slate" }: SpinnerProps) => (
   <div className="w-fit">
-    <div className="relative flex size-full items-center justify-start">
+    <div className={cn("relative flex items-center justify-start", sizesClasses[size as keyof SizeProps])}>
       <motion.span
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.7, repeat: Infinity }}
-        className="absolute left-2 top-0 size-3.5 rounded-full bg-current"
+        className={cn("absolute left-2 top-0 size-3.5 rounded-full", fillClasses[color as keyof FillProps])}
       ></motion.span>
       <motion.span
         initial={{ x: 0 }}
         animate={{ x: 24 }}
         transition={{ duration: 0.7, repeat: Infinity }}
-        className="absolute left-2 top-0 size-3.5 rounded-full bg-current"
+        className={cn("absolute left-2 top-0 size-3.5 rounded-full", fillClasses[color as keyof FillProps])}
       ></motion.span>
       <motion.span
         initial={{ x: 0 }}
         animate={{ x: 24 }}
         transition={{ duration: 0.7, repeat: Infinity }}
-        className="absolute left-8 top-0 size-3.5 rounded-full bg-current"
+        className={cn("absolute left-8 top-0 size-3.5 rounded-full", fillClasses[color as keyof FillProps])}
       ></motion.span>
       <motion.span
         initial={{ scale: 1 }}
         animate={{ scale: 0 }}
         transition={{ duration: 0.7, repeat: Infinity }}
-        className="absolute left-14 top-0 size-3.5 rounded-full bg-current"
+        className={cn("absolute left-14 top-0 size-3.5 rounded-full", fillClasses[color as keyof FillProps])}
       ></motion.span>
     </div>
   </div>
 )
 
-export const Dots_v2 = ({ size, color }: SpinnerProps) => (
-  <div className="flex items-center justify-center">
+export const Dots_v2 = ({ size = "md", color = "slate" }: SpinnerProps) => (
+  <div className={cn("flex items-center justify-center", sizesClasses[size as keyof SizeProps])}>
     <div className="flex space-x-2">
       <motion.div
-        className="size-3.5 rounded-full bg-current"
+        className={cn("size-3.5 rounded-full", fillClasses[color as keyof FillProps])}
         animate={{
           scale: [1, 1.3, 1],
           opacity: [0.6, 1, 0.6],
@@ -161,7 +161,7 @@ export const Dots_v2 = ({ size, color }: SpinnerProps) => (
         }}
       />
       <motion.div
-        className="size-3.5 rounded-full bg-current"
+        className={cn("size-3.5 rounded-full", fillClasses[color as keyof FillProps])}
         animate={{
           scale: [1, 1.3, 1],
           opacity: [0.6, 1, 0.6],
@@ -174,7 +174,7 @@ export const Dots_v2 = ({ size, color }: SpinnerProps) => (
         }}
       />
       <motion.div
-        className="size-3.5 rounded-full bg-current"
+        className={cn("size-3.5 rounded-full", fillClasses[color as keyof FillProps])}
         animate={{
           scale: [1, 1.3, 1],
           opacity: [0.6, 1, 0.6],
@@ -190,22 +190,22 @@ export const Dots_v2 = ({ size, color }: SpinnerProps) => (
   </div>
 )
 
-export const Dots_v3 = ({ size, color }: SpinnerProps) => {
+export const Dots_v3 = ({ size = "md", color = "slate" }: SpinnerProps) => {
   return (
-    <div className="flex items-center justify-center space-x-2">
-      <div className="size-3.5 animate-bounce rounded-full bg-current [animation-delay:-0.3s]"></div>
-      <div className="size-3.5 animate-bounce rounded-full bg-current [animation-delay:-0.13s]"></div>
-      <div className="size-3.5 animate-bounce rounded-full bg-current"></div>
+    <div className={cn("flex items-center justify-center space-x-2", sizesClasses[size as keyof SizeProps])}>
+      <div className={cn("size-3.5 animate-bounce rounded-full [animation-delay:-0.3s]", fillClasses[color as keyof FillProps])}></div>
+      <div className={cn("size-3.5 animate-bounce rounded-full [animation-delay:-0.13s]", fillClasses[color as keyof FillProps])}></div>
+      <div className={cn("size-3.5 animate-bounce rounded-full", fillClasses[color as keyof FillProps])}></div>
     </div>
   )
 }
 
-export const Dots_v4 = ({ size, color }: SpinnerProps) => (
-  <div className="flex items-center justify-center space-x-2">
+export const Dots_v4 = ({ size = "md", color = "slate" }: SpinnerProps) => (
+  <div className={cn("flex items-center justify-center space-x-2", sizesClasses[size as keyof SizeProps])}>
     {[...Array(3)].map((_, index) => (
       <motion.span
         key={index}
-        className="size-3.5 rounded-full bg-current"
+        className={cn("size-3.5 rounded-full", fillClasses[color as keyof FillProps])}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{
@@ -218,12 +218,12 @@ export const Dots_v4 = ({ size, color }: SpinnerProps) => (
   </div>
 )
 
-export const Dots_v5 = ({ size, color }: SpinnerProps) => {
+export const Dots_v5 = ({ size = "md", color = "slate" }: SpinnerProps) => {
   const dots = 8
   const radius = 24
 
   return (
-    <div className="relative size-20 border">
+    <div className={cn("relative size-20", sizesClasses[size as keyof SizeProps])}>
       {[...Array(dots)].map((_, i) => {
         const angle = (i / dots) * (2 * Math.PI)
         const x = radius * Math.cos(angle)
@@ -232,7 +232,7 @@ export const Dots_v5 = ({ size, color }: SpinnerProps) => {
         return (
           <motion.div
             key={i}
-            className="absolute size-2.5 rounded-full bg-current"
+            className={cn("absolute size-2.5 rounded-full", fillClasses[color as keyof FillProps])}
             style={{
               left: `calc(50% + ${x}px)`,
               top: `calc(50% + ${y}px)`,
