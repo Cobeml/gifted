@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/app/components/ui/dialog";
 import { Button } from "@/app/components/ui/button";
@@ -45,14 +45,18 @@ export function AuthModal({ isOpen, onClose, mode }: AuthModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [showVerificationModal, setShowVerificationModal] = useState(false);
-  const formStartTime = useRef(Date.now());
+  const formStartTime = useRef<number | null>(null);
   const [honeypot, setHoneypot] = useState("");
+
+  useEffect(() => {
+    formStartTime.current = Date.now();
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     // Bot detection checks
-    const timeTaken = Date.now() - formStartTime.current;
+    const timeTaken = formStartTime.current ? Date.now() - formStartTime.current : 0;
     if (honeypot || timeTaken < 1500) { // If form filled in less than 1.5 seconds, likely a bot
       setError("Please try again later");
       return;

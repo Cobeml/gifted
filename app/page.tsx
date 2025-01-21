@@ -253,7 +253,7 @@ export default function Home() {
               }}
               className="w-full flex justify-center items-center relative"
             >
-              <h1 className="text-[5rem] sm:text-[8rem] md:text-[10rem] lg:text-[14rem] font-bold dark:text-white text-black font-garamond relative z-10">
+              <h1 className="text-[5rem] sm:text-[8rem] md:text-[10rem] lg:text-[14rem] font-bold text-black dark:text-black font-garamond relative z-10">
                 Gifted
               </h1>
             </motion.div>
@@ -265,7 +265,7 @@ export default function Home() {
                 duration: 0.8,
                 ease: "easeOut",
               }}
-              className="text-xl sm:text-2xl md:text-3xl dark:text-neutral-200 text-neutral-800 font-garamond text-center max-w-3xl relative z-10"
+              className="text-xl sm:text-2xl md:text-3xl text-neutral-800 dark:text-neutral-800 font-garamond text-center max-w-3xl relative z-10"
             >
               AI-Powered Personal Gifting, Curated with Human Touch
             </motion.h2>

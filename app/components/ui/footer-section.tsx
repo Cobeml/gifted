@@ -74,7 +74,7 @@ export function Footerdemo() {
 
   return (
     <>
-      <footer className="relative border-t border-zinc-200 dark:border-zinc-800 bg-zinc-300 dark:bg-zinc-900 text-foreground transition-colors duration-300">
+      <footer className="relative border-t border-zinc-200 bg-zinc-300 text-foreground transition-colors duration-300">
         <div className="container mx-auto px-4 py-8 md:px-6 lg:px-8">
           <div className="grid gap-16 md:grid-cols-3">
             <div className="relative">
@@ -219,7 +219,7 @@ export function Footerdemo() {
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+          <div className="mt-8 pt-8 border-t border-zinc-200">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-sm text-muted-foreground">
                 © {new Date().getFullYear()} Gifted. All rights reserved.
