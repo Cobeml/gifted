@@ -7,7 +7,6 @@ import { NavBar } from "@/app/components/ui/tubelight-navbar";
 import { PricingSection } from "@/app/components/ui/pricing-section";
 import { Button } from "@/app/components/ui/button";
 import { Gift, HomeIcon, CreditCard, Send, UserCircle } from "lucide-react";
-import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { InfiniteSlider } from "@/app/components/ui/infinite-slider";
@@ -95,7 +94,6 @@ const pricingTiers = [
 ];
 
 export default function Home() {
-  const { theme } = useTheme();
   const { data: session } = useSession();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");

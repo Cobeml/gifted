@@ -3,7 +3,7 @@
 import * as React from "react"
 import { BadgeCheck, ArrowRight } from "lucide-react"
 import NumberFlow from "@number-flow/react"
-import { loadStripe } from "@stripe/stripe-js"
+import { loadStripe, Stripe } from "@stripe/stripe-js"
 import { clientConfig } from "@/config/client"
 import { toast } from "sonner"
 import { useSession, signIn } from "next-auth/react"
@@ -14,7 +14,7 @@ import { Button } from "@/app/components/ui/button"
 import { Card } from "@/app/components/ui/card"
 
 // Initialize Stripe outside of the component
-let stripePromise: Promise<any> | null = null;
+let stripePromise: Promise<Stripe | null> | null = null;
 
 const getStripe = () => {
   if (!stripePromise && clientConfig.stripe.publishableKey) {
@@ -51,37 +51,19 @@ export function PricingCard({ tier, paymentFrequency, onSelect }: PricingCardPro
   const isHighlighted = tier.highlighted
   const isPopular = tier.popular
 
-  const handleSubscribe = async () => {
+  const handleClick = async () => {
+    if (!session) {
+      // Store plan selection and trigger email sign in
+      sessionStorage.setItem(
+        "selected_plan",
+        JSON.stringify({ tier: tier.name, frequency: paymentFrequency })
+      );
+      signIn();
+      return;
+    }
+
+    setLoading(true);
     try {
-      if (!session) {
-        // Store plan selection and trigger email sign in
-        sessionStorage.setItem(
-          "selected_plan",
-          JSON.stringify({ tier: tier.name, frequency: paymentFrequency })
-        );
-        await signIn("email", {
-          email: "",
-          redirect: false,
-          callbackUrl: window.location.href,
-        });
-        return;
-      }
-
-      const stripe = await getStripe()
-      
-      if (!stripe) {
-        toast.error("Payment system not available")
-        return
-      }
-
-      if (!priceId) {
-        toast.error("Invalid price selected")
-        return
-      }
-
-      setLoading(true)
-
-      // Create a Checkout Session
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: {
@@ -89,48 +71,32 @@ export function PricingCard({ tier, paymentFrequency, onSelect }: PricingCardPro
         },
         body: JSON.stringify({
           priceId,
-          plan: tier.name.toLowerCase().replace(/\s+/g, '_'),
-          successUrl: window.location.origin + "/dashboard?success=true",
-          cancelUrl: window.location.origin + window.location.pathname,
+          successUrl: `${window.location.origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+          cancelUrl: window.location.href,
+          plan: tier.name.toLowerCase().replace(" ", "_"),
         }),
-      })
+      });
 
-      if (response.status === 401) {
-        // Trigger email sign in if session expired
-        await signIn("email", {
-          email: "",
-          redirect: false,
-          callbackUrl: window.location.href,
-        });
-        return;
+      const { id: sessionId } = await response.json();
+
+      // Get Stripe.js instance
+      const stripe = await getStripe();
+      if (!stripe) {
+        throw new Error("Failed to load Stripe");
       }
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.message || "Failed to create checkout session")
-      }
-
-      const checkoutSession = await response.json()
 
       // Redirect to Checkout
-      const result = await stripe.redirectToCheckout({
-        sessionId: checkoutSession.id,
-      })
-
-      if (result?.error) {
-        throw new Error(result.error.message)
+      const { error } = await stripe.redirectToCheckout({ sessionId });
+      if (error) {
+        throw error;
       }
     } catch (error) {
-      console.error("Error:", error)
-      if (error instanceof Error && error.message.includes('third-party cookies')) {
-        toast.error("Please disable your ad blocker or allow third-party cookies for Stripe")
-      } else {
-        toast.error(error instanceof Error ? error.message : "Failed to process payment")
-      }
+      console.error("Error:", error);
+      toast.error("Something went wrong. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Card

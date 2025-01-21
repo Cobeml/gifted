@@ -92,7 +92,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
       from: process.env.AWS_SES_AUTH_FROM_EMAIL,
-      sendVerificationRequest: async ({ identifier, url, provider }) => {
+      sendVerificationRequest: async ({ identifier, url }) => {
         const { host } = new URL(url);
         await EmailService.sendAuthEmail(
           identifier,

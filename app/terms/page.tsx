@@ -10,7 +10,7 @@ export default function TermsPage() {
           <p className="text-lg mb-6">Last updated: {new Date().toLocaleDateString()}</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. Agreement to Terms</h2>
-          <p>By accessing or using Gifted ("the Service"), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you do not have permission to access the Service.</p>
+          <p>By accessing or using Gifted (&quot;the Service&quot;), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you do not have permission to access the Service.</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">2. Description of Service</h2>
           <p>Gifted is an AI-powered gift curation service that provides personalized gift recommendations and purchasing options. The Service includes gift suggestions, purchasing capabilities, and related features.</p>

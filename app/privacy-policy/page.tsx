@@ -60,11 +60,11 @@ export default function PrivacyPage() {
           <h2 className="text-2xl font-semibold mt-8 mb-4">7. Cookies and Tracking</h2>
           <p>We use cookies and similar tracking technologies to track activity on our Service and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.</p>
           
-          <h2 className="text-2xl font-semibold mt-8 mb-4">8. Children's Privacy</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">8. Children&apos;s Privacy</h2>
           <p>Our Service does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13.</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">9. Changes to This Privacy Policy</h2>
-          <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.</p>
+          <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last updated&quot; date.</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">10. Contact Us</h2>
           <p>If you have any questions about this Privacy Policy, please contact us:</p>
