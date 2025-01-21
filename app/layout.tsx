@@ -3,7 +3,7 @@ import { EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "./api/auth/auth-options";
 import { ToastProvider } from "@/app/components/providers/toast-provider";
 import { Toaster } from "@/app/components/ui/toaster";
 

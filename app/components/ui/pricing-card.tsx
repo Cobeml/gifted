@@ -51,7 +51,7 @@ export function PricingCard({ tier, paymentFrequency, onSelect }: PricingCardPro
   const isHighlighted = tier.highlighted
   const isPopular = tier.popular
 
-  const handleSelect = async () => {
+  const handleClick = async () => {
     onSelect(); // Call the parent's onSelect first
     
     if (!session) {
@@ -165,7 +165,7 @@ export function PricingCard({ tier, paymentFrequency, onSelect }: PricingCardPro
         <Button
           variant={isHighlighted ? "secondary" : "default"}
           className="w-full"
-          onClick={handleSelect}
+          onClick={handleClick}
           disabled={loading}
         >
           {loading ? "Loading..." : tier.cta}
