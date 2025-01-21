@@ -114,7 +114,7 @@ export const Dots = ({ variant = "v1", ...props }: DotsProps) => {
   }
 }
 
-export const Dots_v1 = () => (
+export const Dots_v1 = ({ size, color }: SpinnerProps) => (
   <div className="w-fit">
     <div className="relative flex size-full items-center justify-start">
       <motion.span
@@ -145,8 +145,8 @@ export const Dots_v1 = () => (
   </div>
 )
 
-export const Dots_v2 = () => (
-  <div className="flex items-center justify-center ">
+export const Dots_v2 = ({ size, color }: SpinnerProps) => (
+  <div className="flex items-center justify-center">
     <div className="flex space-x-2">
       <motion.div
         className="size-3.5 rounded-full bg-current"
@@ -190,7 +190,7 @@ export const Dots_v2 = () => (
   </div>
 )
 
-export const Dots_v3 = () => {
+export const Dots_v3 = ({ size, color }: SpinnerProps) => {
   return (
     <div className="flex items-center justify-center space-x-2">
       <div className="size-3.5 animate-bounce rounded-full bg-current [animation-delay:-0.3s]"></div>
@@ -200,7 +200,7 @@ export const Dots_v3 = () => {
   )
 }
 
-export const Dots_v4 = () => (
+export const Dots_v4 = ({ size, color }: SpinnerProps) => (
   <div className="flex items-center justify-center space-x-2">
     {[...Array(3)].map((_, index) => (
       <motion.span
@@ -218,7 +218,7 @@ export const Dots_v4 = () => (
   </div>
 )
 
-export const Dots_v5 = () => {
+export const Dots_v5 = ({ size, color }: SpinnerProps) => {
   const dots = 8
   const radius = 24
 

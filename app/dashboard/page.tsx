@@ -116,11 +116,11 @@ export default function DashboardPage() {
 
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 flex items-center justify-between px-4 py-4 z-50">
-        <Link href="/" className="cursor-pointer">
+        <Link href="/" className="cursor-pointer pl-4">
           <Image
             src="/logo.svg"
             alt="Gifted Logo"
-            width={170}
+            width={85}
             height={85}
             priority
           />

@@ -176,7 +176,7 @@ export default function Home() {
       />
       <div className="fixed top-0 left-0 right-0 flex items-center justify-between px-4 z-50">
         <div 
-          className="py-4 cursor-pointer" 
+          className="py-4 cursor-pointer pl-4" 
           onClick={() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
@@ -184,7 +184,7 @@ export default function Home() {
           <Image
             src="/logo.svg"
             alt="Gifted Logo"
-            width={170}
+            width={85}
             height={85}
             priority
           />
