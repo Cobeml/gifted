@@ -6,6 +6,7 @@ import NumberFlow from "@number-flow/react"
 import { loadStripe } from "@stripe/stripe-js"
 import { clientConfig } from "@/config/client"
 import { toast } from "sonner"
+import { useSession, signIn } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import { Badge } from "@/app/components/ui/badge"
@@ -39,10 +40,12 @@ export interface PricingTier {
 interface PricingCardProps {
   tier: PricingTier
   paymentFrequency: string
+  onSelect: () => void
 }
 
-export function PricingCard({ tier, paymentFrequency }: PricingCardProps) {
+export function PricingCard({ tier, paymentFrequency, onSelect }: PricingCardProps) {
   const [loading, setLoading] = React.useState(false)
+  const { data: session } = useSession()
   const price = tier.price[paymentFrequency]
   const priceId = tier.priceIds?.[paymentFrequency as keyof typeof tier.priceIds]
   const isHighlighted = tier.highlighted
@@ -50,6 +53,20 @@ export function PricingCard({ tier, paymentFrequency }: PricingCardProps) {
 
   const handleSubscribe = async () => {
     try {
+      if (!session) {
+        // Store plan selection and trigger email sign in
+        sessionStorage.setItem(
+          "selected_plan",
+          JSON.stringify({ tier: tier.name, frequency: paymentFrequency })
+        );
+        await signIn("email", {
+          email: "",
+          redirect: false,
+          callbackUrl: window.location.href,
+        });
+        return;
+      }
+
       const stripe = await getStripe()
       
       if (!stripe) {
@@ -72,21 +89,32 @@ export function PricingCard({ tier, paymentFrequency }: PricingCardProps) {
         },
         body: JSON.stringify({
           priceId,
-          successUrl: window.location.origin + "/?success=true",
+          plan: tier.name.toLowerCase().replace(/\s+/g, '_'),
+          successUrl: window.location.origin + "/dashboard?success=true",
           cancelUrl: window.location.origin + window.location.pathname,
         }),
       })
+
+      if (response.status === 401) {
+        // Trigger email sign in if session expired
+        await signIn("email", {
+          email: "",
+          redirect: false,
+          callbackUrl: window.location.href,
+        });
+        return;
+      }
 
       if (!response.ok) {
         const error = await response.json()
         throw new Error(error.message || "Failed to create checkout session")
       }
 
-      const session = await response.json()
+      const checkoutSession = await response.json()
 
       // Redirect to Checkout
       const result = await stripe.redirectToCheckout({
-        sessionId: session.id,
+        sessionId: checkoutSession.id,
       })
 
       if (result?.error) {
@@ -94,7 +122,11 @@ export function PricingCard({ tier, paymentFrequency }: PricingCardProps) {
       }
     } catch (error) {
       console.error("Error:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to process payment")
+      if (error instanceof Error && error.message.includes('third-party cookies')) {
+        toast.error("Please disable your ad blocker or allow third-party cookies for Stripe")
+      } else {
+        toast.error(error instanceof Error ? error.message : "Failed to process payment")
+      }
     } finally {
       setLoading(false)
     }
@@ -113,7 +145,7 @@ export function PricingCard({ tier, paymentFrequency }: PricingCardProps) {
       {isHighlighted && <HighlightedBackground />}
       {isPopular && <PopularBackground />}
 
-      <h2 className="flex items-center gap-3 text-xl font-medium capitalize font-heading">
+      <h2 className="flex items-center gap-3 text-lg sm:text-xl font-medium capitalize font-heading">
         {tier.name}
         {isPopular && (
           <Badge variant="secondary" className="mt-1 z-10">
@@ -132,29 +164,29 @@ export function PricingCard({ tier, paymentFrequency }: PricingCardProps) {
                 trailingZeroDisplay: "stripIfInteger",
               }}
               value={price}
-              className="text-4xl font-medium font-heading"
+              className="text-3xl sm:text-4xl font-medium font-heading"
             />
             <p className="-mt-2 text-xs text-muted-foreground font-body">
               {tier.name === "Single Gift" ? "One time" : "Per month"}
             </p>
           </>
         ) : (
-          <h1 className="text-4xl font-medium font-heading">{price}</h1>
+          <h1 className="text-3xl sm:text-4xl font-medium font-heading">{price}</h1>
         )}
       </div>
 
       <div className="flex-1 space-y-2">
-        <h3 className="text-sm font-medium font-heading">{tier.description}</h3>
+        <h3 className="text-xs sm:text-sm font-medium font-heading">{tier.description}</h3>
         <ul className="space-y-2 font-body">
           {tier.features.map((feature, index) => (
             <li
               key={index}
               className={cn(
-                "flex items-center gap-2 text-sm font-medium",
+                "flex items-center gap-2 text-xs sm:text-sm font-medium",
                 isHighlighted ? "text-background" : "text-muted-foreground"
               )}
             >
-              <BadgeCheck className="h-4 w-4" />
+              <BadgeCheck className="h-3 w-3 sm:h-4 sm:w-4" />
               {feature}
             </li>
           ))}
@@ -165,7 +197,7 @@ export function PricingCard({ tier, paymentFrequency }: PricingCardProps) {
         <Button
           variant={isHighlighted ? "secondary" : "default"}
           className="w-full"
-          onClick={handleSubscribe}
+          onClick={onSelect}
           disabled={loading}
         >
           {loading ? "Loading..." : tier.cta}

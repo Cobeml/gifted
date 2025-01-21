@@ -1,5 +1,7 @@
 import { dynamoDb } from "@/utils/aws-config";
 import { NewsletterSubscriber, TableNames, validateNewsletterSubscriber } from "@/utils/dynamodb-schema";
+import { EmailService } from "@/utils/email-service";
+import crypto from "crypto";
 
 export async function POST(req: Request) {
   try {
@@ -19,17 +21,35 @@ export async function POST(req: Request) {
     }).promise();
 
     if (existingSubscriber.Item) {
-      return new Response(
-        JSON.stringify({ message: "Already subscribed" }),
-        { status: 200 }
-      );
+      if (existingSubscriber.Item.status === "active") {
+        return new Response(
+          JSON.stringify({ message: "Already subscribed" }),
+          { status: 200 }
+        );
+      } else if (existingSubscriber.Item.status === "pending") {
+        // Resend verification email
+        await EmailService.sendNewsletterVerification({
+          email: existingSubscriber.Item.email,
+          status: existingSubscriber.Item.status,
+          subscribed_at: existingSubscriber.Item.subscribed_at,
+          verification_token: existingSubscriber.Item.verification_token,
+        });
+        return new Response(
+          JSON.stringify({ message: "Verification email resent" }),
+          { status: 200 }
+        );
+      }
     }
+
+    // Generate verification token
+    const verificationToken = crypto.randomBytes(32).toString("hex");
 
     // Create new subscriber item
     const newSubscriber: NewsletterSubscriber = {
       email,
       subscribed_at: new Date().toISOString(),
-      status: "active",
+      status: "pending",
+      verification_token: verificationToken,
     };
 
     // Validate the item
@@ -43,10 +63,11 @@ export async function POST(req: Request) {
       Item: newSubscriber,
     }).promise();
 
-    // TODO: Send welcome email using email service
+    // Send verification email
+    await EmailService.sendNewsletterVerification(newSubscriber);
 
     return new Response(
-      JSON.stringify({ message: "Successfully subscribed" }),
+      JSON.stringify({ message: "Please check your email to verify your subscription" }),
       { status: 200 }
     );
   } catch (error) {

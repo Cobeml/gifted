@@ -1,10 +1,11 @@
-export const dynamic = 'force-dynamic';
-
 import type { Metadata } from "next";
 import { EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import { Toaster } from "sonner";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import { ToastProvider } from "@/app/components/providers/toast-provider";
+import { Toaster } from "@/app/components/ui/toaster";
 
 const garamond = EB_Garamond({ 
   subsets: ["latin"],
@@ -16,16 +17,22 @@ export const metadata: Metadata = {
   description: "AI-Powered Personal Gifting, Curated with Human Touch",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en" suppressHydrationWarning className="overscroll-none">
       <body className={`${garamond.className} overscroll-none`}>
-        <Providers>{children}</Providers>
-        <Toaster />
+        <ToastProvider>
+          <Providers session={session}>
+            {children}
+          </Providers>
+          <Toaster />
+        </ToastProvider>
       </body>
     </html>
   );
