@@ -2,12 +2,12 @@
 
 import { useState, useRef } from "react";
 import { signIn } from "next-auth/react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/app/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/app/components/ui/dialog";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { LucideProps } from "lucide-react";
-import { Loader2, Mail, CheckCircle2 } from "lucide-react";
+import { Loader2, Mail } from "lucide-react";
 import { VerificationModal } from "@/app/components/ui/verification-modal";
 
 interface AuthModalProps {

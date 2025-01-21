@@ -1,10 +1,8 @@
-import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { 
   createPaymentRecord, 
   createSubscriptionRecord, 
-  updateUserSubscription,
-  setStripeCustomerId 
+  updateUserSubscription
 } from '@/utils/db/subscription';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {

@@ -197,7 +197,7 @@ export default function DashboardPage() {
                   </p>
                   <div className="mt-3 pt-3 border-t border-gray-100">
                     <p className="text-sm text-muted-foreground">
-                      Our AI and expert curators are crafting personalized gift options. You'll receive an email with suggestions within 2-3 business days.
+                      Our AI and expert curators are crafting personalized gift options. You&apos;ll receive an email with suggestions within 2-3 business days.
                     </p>
                   </div>
                 </motion.div>

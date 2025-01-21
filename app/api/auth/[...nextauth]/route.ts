@@ -117,7 +117,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt"
   },
   callbacks: {
-    async signIn({ user, account }: { user: User; account: any }) {
+    async signIn({ user }: { user: User }) {
       if (user.email) {
         user.email = user.email.toLowerCase();
       }

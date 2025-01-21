@@ -228,7 +228,7 @@ export function Footerdemo() {
                 <Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Terms
                 </Link>
-                <Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Privacy
                 </Link>
               </div>

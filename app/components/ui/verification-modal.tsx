@@ -48,14 +48,14 @@ export function VerificationModal({
             <h2 className="text-2xl font-bold">{title}</h2>
             <div className="space-y-2">
               <p className="text-lg">
-                We've sent a verification link to:
+                We&apos;ve sent a verification link to:
               </p>
               <p className="font-medium text-lg">{email}</p>
             </div>
             <div className="text-muted-foreground space-y-2">
               <p>{description}</p>
               <p className="text-sm">
-                Can't find the email? Check your spam/junk folder or{" "}
+                Can&apos;t find the email? Check your spam/junk folder or{" "}
                 <button 
                   onClick={handleResend}
                   disabled={isResending}

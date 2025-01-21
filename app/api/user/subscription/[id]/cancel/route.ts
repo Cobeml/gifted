@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { updateUserSubscription, createSubscriptionRecord } from "@/utils/db/subscription";
+import { updateUserSubscription } from "@/utils/db/subscription";
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { TableNames } from "@/utils/dynamodb-schema";

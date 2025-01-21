@@ -10,7 +10,7 @@ export default function PrivacyPage() {
           <p className="text-lg mb-6">Last updated: {new Date().toLocaleDateString()}</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">1. Introduction</h2>
-          <p>This Privacy Policy explains how Gifted ("we", "our", or "us") collects, uses, and protects your personal information when you use our service. We respect your privacy and are committed to protecting your personal data.</p>
+          <p>This Privacy Policy explains how Gifted (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) collects, uses, and protects your personal information when you use our service. We respect your privacy and are committed to protecting your personal data.</p>
           
           <h2 className="text-2xl font-semibold mt-8 mb-4">2. Information We Collect</h2>
           <p>We collect several types of information for various purposes to provide and improve our Service to you:</p>

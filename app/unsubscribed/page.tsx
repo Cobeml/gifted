@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import Link from 'next/link';
 
 export default function UnsubscribedPage({
   searchParams,
@@ -19,15 +19,15 @@ export default function UnsubscribedPage({
                 : 'You have been unsubscribed from our newsletter.'}
             </p>
             <p className="mt-2">
-              We're sorry to see you go! You can always subscribe again if you change your mind.
+              We&apos;re sorry to see you go! You can always subscribe again if you change your mind.
             </p>
           </div>
-          <a
+          <Link
             href="/"
             className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
             Return Home
-          </a>
+          </Link>
         </div>
       </div>
     </div>

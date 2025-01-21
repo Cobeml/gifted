@@ -158,7 +158,7 @@ export function GiftModal({ isOpen, onClose, onSuccess, gift }: GiftModalProps) 
                 ...prev,
                 recipientName: e.target.value
               }))}
-              placeholder="Enter recipient's name"
+              placeholder="Enter recipient&apos;s name"
               className="rounded-xl border-2 border-black/10"
               required
             />
@@ -285,7 +285,7 @@ export function GiftModal({ isOpen, onClose, onSuccess, gift }: GiftModalProps) 
           {/* Recipient Style */}
           <div className="space-y-2">
             <Label htmlFor="style" className="text-base font-semibold">
-              Recipient's Style (press Enter after each one)
+              Recipient&apos;s Style (press Enter after each one)
             </Label>
             <TagInput
               id="style"
@@ -301,7 +301,7 @@ export function GiftModal({ isOpen, onClose, onSuccess, gift }: GiftModalProps) 
           {/* Recipient Interests */}
           <div className="space-y-2">
             <Label htmlFor="interests" className="text-base font-semibold">
-              Recipient's Interests (press Enter after each one)
+              Recipient&apos;s Interests (press Enter after each one)
             </Label>
             <TagInput
               id="interests"
