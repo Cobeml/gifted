@@ -51,7 +51,9 @@ export function PricingCard({ tier, paymentFrequency, onSelect }: PricingCardPro
   const isHighlighted = tier.highlighted
   const isPopular = tier.popular
 
-  const handleClick = async () => {
+  const handleSelect = async () => {
+    onSelect(); // Call the parent's onSelect first
+    
     if (!session) {
       // Store plan selection and trigger email sign in
       sessionStorage.setItem(
@@ -163,7 +165,7 @@ export function PricingCard({ tier, paymentFrequency, onSelect }: PricingCardPro
         <Button
           variant={isHighlighted ? "secondary" : "default"}
           className="w-full"
-          onClick={onSelect}
+          onClick={handleSelect}
           disabled={loading}
         >
           {loading ? "Loading..." : tier.cta}
